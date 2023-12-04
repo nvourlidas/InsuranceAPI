@@ -1,9 +1,12 @@
 const db = require('../db/db')
 const express = require('express')
 const router = new express.Router()
+const cors = require('cors')
+
+router.use(cors());
 
 router.post('/customer', (req, res) => {
-    const { name, surname, email, cellphone, phone, gender, postcode, property, birthday } = req.body;
+    const { name, surname, email, cellphone, phone, gender, postcode, property, birthday,afm } = req.body;
     if (typeof name !== 'string' ||typeof surname !== 'string' ||typeof email !== 'string' ||typeof cellphone !== 'string' ||typeof phone !== 'string' ||
         typeof gender !== 'string' ||
         typeof postcode !== 'number' ||
@@ -14,10 +17,10 @@ router.post('/customer', (req, res) => {
 
 
     const insertQuery = `
-      INSERT INTO customer (name, surname, email, cellphone, phone, gender, postcode, property, birthday)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO customer (name, surname, email, cellphone, phone, gender, postcode, property, birthday,afm)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
     `;
-    db.query(insertQuery,[name, surname, email, cellphone, phone, gender, postcode, property, birthday],(err, results) => {
+    db.query(insertQuery,[name, surname, email, cellphone, phone, gender, postcode, property, birthday,afm],(err, results) => {
         if (err) {
           console.error('Error inserting into the table:', err);
           res.status(500).send('Error inserting into the table');
