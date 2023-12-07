@@ -13,7 +13,6 @@ function getAllContracts() {
     });
 }
 
-
 function getUserbyAFM(afm) {
     const selectQuery = 'SELECT cid FROM customer WHERE afm = ?';
 
@@ -28,7 +27,6 @@ function getUserbyAFM(afm) {
         });
     });
 }
-
 
 function createContract(contractData, customerID) {
     const insertQuery = `
@@ -61,11 +59,26 @@ function createContract(contractData, customerID) {
     });
 }
 
-
-
-
+function ContractsInsurance() {
+    const selectQuery = `
+    SELECT *, DATE_FORMAT(startdate, '%Y-%m-%d') AS startdate, DATE_FORMAT(enddate, '%Y-%m-%d') AS enddate
+    FROM insurances
+    INNER JOIN contracts ON insurances.inid=contracts.insuranceid
+    INNER JOIN branches ON branches.bid=contracts.branchid;
+  `;
+  return new Promise((resolve, reject) => {
+    db.query(selectQuery, (err, results) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(results);
+        }
+    });
+});  
+}
 module.exports = {
     getAllContracts,
     createContract,
-    getUserbyAFM
+    getUserbyAFM,
+    ContractsInsurance
 };

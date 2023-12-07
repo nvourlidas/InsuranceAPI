@@ -27,9 +27,9 @@ router.get('/customer', (req,res) =>{
 })
 //DELETE ROUTE CUSTOMER
 router.delete('/customer', (req, res) => {
-  const { name, surname, email } = req.body;
+  const CustomerId =req.body.id
 
-  deleteCustomer(name, surname, email, (err, result) => {
+  deleteCustomer(CustomerId, (err, result) => {
       if (err) {
           console.error('Error executing MySQL query:', err);
           return res.status(500).send('Internal Server Error');

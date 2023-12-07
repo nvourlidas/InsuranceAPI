@@ -10,18 +10,18 @@ function insertCustomer(data, callback) {
 
 function getCustomers(callback) {
     const selectQuery = `
-      SELECT * FROM customer
+      SELECT *,DATE_FORMAT(birthday, '%Y-%m-%d') AS birthday FROM customer
     `;
     db.query(selectQuery, callback);
 }
 
-function deleteCustomer(name, surname, email, callback) {
+function deleteCustomer(CustomerId, callback) {
     const checkQuery = `
       SELECT * FROM customer
-      WHERE name = ? AND surname = ? AND email = ?
+      WHERE cid =?
     `;
 
-    db.query(checkQuery, [name, surname, email], (err, result) => {
+    db.query(checkQuery, [CustomerId], (err, result) => {
         if (err) {
             console.error('Error executing MySQL query:', err);
             return callback(err, null);
@@ -33,12 +33,11 @@ function deleteCustomer(name, surname, email, callback) {
 
         const deleteQuery = `
             DELETE FROM customer
-            WHERE name = ? AND surname = ? AND email = ?
+            WHERE cid =?
         `;
-        db.query(deleteQuery, [name, surname, email], callback);
+        db.query(deleteQuery, [CustomerId], callback);
     });
 }
-
 
 function getCustomerById(customerId) {
     const selectQuery = 'SELECT * FROM customer WHERE cid = ?';
@@ -65,7 +64,5 @@ function updateCustomer(customerId, updates) {
         });
     });
 }
-
-
 
 module.exports= {insertCustomer, getCustomers,deleteCustomer,getCustomerById,updateCustomer}

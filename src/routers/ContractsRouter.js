@@ -3,8 +3,8 @@
 //UPDATE ROUTE SIMBOLAIO
 const express = require('express')
 const router = new express.Router()
-const {getAllContracts,createContract,getUserbyAFM} = require('../db/Contractqueries')
-
+const {getAllContracts,createContract,getUserbyAFM,ContractsInsurance,ContractsBranch} = require('../db/Contractqueries')
+const db = require('../db/db')
 
 router.get('/contracts', async(req,res) =>{
     try{
@@ -39,5 +39,23 @@ router.post('/contracts', async (req, res) => {
     }
 });
 
+
+router.get("/contracts-insurance", async (req, res) => {
+    try{
+        const contracts = await ContractsInsurance();
+        res.status(200).json(contracts);
+    }catch(e){
+        res.status(500).send(e)
+    }
+  });
+
+  router.get("/contracts-branch", async (req, res) => {
+    try{
+        const contracts = await ContractsInsurance();
+        res.status(200).json(contracts);
+    }catch(e){
+        res.status(500).send(e)
+    }
+  });
 
 module.exports=router
