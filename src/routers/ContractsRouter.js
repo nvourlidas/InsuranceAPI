@@ -3,7 +3,7 @@
 //UPDATE ROUTE SIMBOLAIO
 const express = require('express')
 const router = new express.Router()
-const {getAllContracts,createContract,getUserbyAFM,ContractsInsurance,ContractsBranch} = require('../db/Contractqueries')
+const {getAllContracts,createContract,getUserbyAFM,ContractsInsurance,deleteContract,getContractsAndCustomer} = require('../db/Contractqueries')
 const db = require('../db/db')
 
 router.get('/contracts', async(req,res) =>{
@@ -39,7 +39,6 @@ router.post('/contracts', async (req, res) => {
     }
 });
 
-
 router.get("/contracts-insurance", async (req, res) => {
     try{
         const contracts = await ContractsInsurance();
@@ -57,5 +56,35 @@ router.get("/contracts-insurance", async (req, res) => {
         res.status(500).send(e)
     }
   });
+
+
+
+  router.delete('/contracts', (req, res) => {
+    const ConId =req.body.id
+  
+    deleteContract(ConId, (err, result) => {
+        if (err) {
+            console.error('Error executing MySQL query:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+  
+        if (result.notFound) {
+            return res.status(404).send('Customer not found');
+        }
+  
+        res.status(200).send('User is deleted');
+    });
+  });
+
+router.get('/contracts-customer',async (req, res) => {
+    try{
+        const contracts = await getContractsAndCustomer()
+        res.status(200).json(contracts);
+    }catch(e){
+        res.status(500).send(e)
+    }
+  });
+
+
 
 module.exports=router

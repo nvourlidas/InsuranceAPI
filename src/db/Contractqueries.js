@@ -30,8 +30,8 @@ function getUserbyAFM(afm) {
 
 function createContract(contractData, customerID) {
     const insertQuery = `
-        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
     `;
     
     const values = [
@@ -44,7 +44,9 @@ function createContract(contractData, customerID) {
         contractData.clear,
         contractData.mikta,
         contractData.promithia,
-        contractData.paymentmethod
+        contractData.paymentmethod,
+        contractData.omadiko,
+        contractData.pinakida,
     ];
 
     return new Promise((resolve, reject) => {
@@ -61,7 +63,7 @@ function createContract(contractData, customerID) {
 
 function ContractsInsurance() {
     const selectQuery = `
-    SELECT *, DATE_FORMAT(startdate, '%Y-%m-%d') AS startdate, DATE_FORMAT(enddate, '%Y-%m-%d') AS enddate
+    SELECT *, DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate
     FROM insurances
     INNER JOIN contracts ON insurances.inid=contracts.insuranceid
     INNER JOIN branches ON branches.bid=contracts.branchid;
@@ -76,9 +78,57 @@ function ContractsInsurance() {
     });
 });  
 }
+
+function deleteContract(ConId, callback) {
+    const checkQuery = `
+      SELECT * FROM contracts
+      WHERE conid =?
+    `;
+
+    db.query(checkQuery, [ConId], (err, result) => {
+        if (err) {
+            console.error('Error executing MySQL query:', err);
+            return callback(err, null);
+        }
+
+        if (result.length === 0) {
+            return callback(null, { notFound: true });
+        }
+
+        const deleteQuery = `
+            DELETE FROM contracts
+            WHERE conid =?
+        `;
+        db.query(deleteQuery, [ConId], callback);
+    });
+}
+
+
+function getContractsAndCustomer(){
+    const insertQuery = `
+    SELECT * 
+    FROM contracts 
+    INNER JOIN customer ON contracts.custid=customer.cid;
+`;
+return new Promise((resolve, reject) => {
+    db.query(insertQuery,(err, results) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(results);
+        }
+    });
+});
+
+}
+
+
+
 module.exports = {
     getAllContracts,
     createContract,
     getUserbyAFM,
-    ContractsInsurance
+    ContractsInsurance,
+    deleteContract,
+    getContractsAndCustomer
 };

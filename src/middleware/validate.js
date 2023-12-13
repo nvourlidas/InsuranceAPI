@@ -4,7 +4,7 @@ const post_validator = (req,res,next) =>{
         
     if (typeof name !== 'string' ||typeof surname !== 'string' ||typeof email !== 'string' ||typeof cellphone !== 'string' ||typeof phone !== 'string' ||
         typeof gender !== 'string' ||
-        typeof postcode !== 'number' ||
+        typeof postcode !== 'string' ||
         typeof property !== 'string' ||
         typeof afm !== 'string') {
         res.status(400).send('Invalid data types');
