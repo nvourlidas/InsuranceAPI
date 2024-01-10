@@ -1,3 +1,7 @@
+
+
+
+
 const db = require('./db')
 
 function getAllContracts() {
@@ -103,12 +107,13 @@ function deleteContract(ConId, callback) {
     });
 }
 
-
 function getContractsAndCustomer(){
     const insertQuery = `
-    SELECT * 
-    FROM contracts 
-    INNER JOIN customer ON contracts.custid=customer.cid;
+    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate
+    FROM contracts
+    INNER JOIN customer ON contracts.custid=customer.cid
+    INNER JOIN insurances ON insurances.inid=contracts.insuranceid
+    INNER JOIN branches ON branches.bid=contracts.branchid;
 `;
 return new Promise((resolve, reject) => {
     db.query(insertQuery,(err, results) => {
@@ -122,7 +127,37 @@ return new Promise((resolve, reject) => {
 
 }
 
+function getContractById(conid){
+    const insertQuery = `
+        SELECT * FROM contracts
+        WHERE conid = ?
+    `
+    return new Promise((resolve, reject) => {
+        db.query(insertQuery, [conid], (err, results) => {
+            if (err) {
+                console.log(err)
+                reject(err);
+            } else {
+                resolve(results[0]);
+            }
+        });
+    });
+}
 
+function UpdateContracts(id,updates){
+    const insertQuery =` UPDATE contracts SET ? WHERE conid =? `;
+
+    return new Promise((resolve,reject) =>{
+        db.query(insertQuery,[updates,id],(err,results) =>{
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    })
+
+}
 
 module.exports = {
     getAllContracts,
@@ -130,5 +165,7 @@ module.exports = {
     getUserbyAFM,
     ContractsInsurance,
     deleteContract,
-    getContractsAndCustomer
+    getContractsAndCustomer,
+    UpdateContracts,
+    getContractById
 };

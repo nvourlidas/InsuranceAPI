@@ -6,6 +6,8 @@ const InsuranceRoute = require('./routers/InsuranceRouter')
 const BranchRouter = require('./routers/BrancesRouter')
 const CoverRouter = require('./routers/CoversRouter')
 const FileRouter = require('./routers/FilesRouter')
+const ZimiesRouter = require('./routers/ZimiesRouter')
+const DeletedCostumers = require('./routers/DeletedCustomersRouter')
 
 const app = express()
 app.use(bodyParser.json());
@@ -18,6 +20,8 @@ app.use(InsuranceRoute)
 app.use(BranchRouter)
 app.use(CoverRouter)
 app.use(FileRouter)
+app.use(ZimiesRouter)
+app.use(DeletedCostumers)
 
 app.listen(port, ()=>{
     console.log('Server is running on port: ',port)

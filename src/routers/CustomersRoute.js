@@ -26,22 +26,24 @@ router.get('/customer', (req,res) =>{
 });
 })
 //DELETE ROUTE CUSTOMER
-router.delete('/customer', (req, res) => {
-  const CustomerId =req.body.id
+router.delete('/customer', async (req, res) => {
+  const CustomerId = req.body.id;
 
-  deleteCustomer(CustomerId, (err, result) => {
-      if (err) {
-          console.error('Error executing MySQL query:', err);
-          return res.status(500).send('Internal Server Error');
-      }
+  try {
+      const result = await deleteCustomer(CustomerId);
 
       if (result.notFound) {
-          return res.status(404).send('Customer not found');
+          res.status(404).send('Customer not found');
+      } else {
+          res.status(200).send('User is deleted');
       }
-
-      res.status(200).send('User is deleted');
-  });
+  } catch (error) {
+      console.error('Error executing MySQL query:', error);
+      res.status(500).send('Internal Server Error');
+  }
 });
+
+
 //UPDATE ROUTE CUSTOMER 
 router.patch('/customer/:id', async (req, res) => {
   const customerId = req.params.id;

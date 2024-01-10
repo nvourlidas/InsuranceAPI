@@ -3,6 +3,7 @@ const db = require('../db/db')
 const router = new express.Router()
 const {getAllFiles,uploadFileToDatabase,getFileByIdAsync,getCustomerNameAndSurnameForTest} = require('../db/Filesqueries')
 const multer = require('multer')
+const iconv = require('iconv-lite');
 
 
 // Multer configuration for file uploads
@@ -31,7 +32,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     return res.status(400).send('No file uploaded.');
   }
   try {
-    await uploadFileToDatabase(file.originalname, file.buffer,cuid,coid,zimid);
+    const decodedFilename = iconv.decode(file.originalname, 'utf-8');
+    await uploadFileToDatabase(decodedFilename, file.buffer,cuid,coid,zimid);
     console.log('File uploaded and saved to database.');
     res.status(200).send('File uploaded and saved to database.');
   } catch (error) {
@@ -57,9 +59,11 @@ router.get('/download/:id', async (req, res) => {
     const filename = file.filename;
     const fileData = file.data;
 
-    // Set the appropriate headers for file download
-    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-    res.setHeader('Content-type', 'application/octet-stream');
+    // // Set the appropriate headers for file download
+    // res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    // res.setHeader('Content-type', 'application/octet-stream');
+    res.setHeader('Content-disposition', 'attachment; filename="' + encodeURIComponent(filename) + '"');
+    res.setHeader('Content-type', 'application/octet-stream; charset=utf-8');
 
     // Send the file data as the response
     res.send(fileData);
