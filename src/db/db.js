@@ -3,9 +3,9 @@
 const mysql = require('mysql2')
 
 const db= mysql.createConnection({
-    host: "94.130.204.38",
+    host: "localhost",
     user: "nikosvour",
-    password: "123456",
+    password: "!@#$%^ABGD789",
     database: 'yivfclqm_insuranceApi',
     port: '3306'
    });
@@ -27,3 +27,6 @@ module.exports=db
 
 // user: "user2",
 // password: "G#h2T!pR8sY6",
+
+//old host: 94.130.204.38
+//new db PAss: !@#$%^ABGD789

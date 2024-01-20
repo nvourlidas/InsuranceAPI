@@ -34,8 +34,8 @@ function getUserbyAFM(afm) {
 
 function createContract(contractData, customerID) {
     const insertQuery = `
-        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
+        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
     `;
     
     const values = [
@@ -51,6 +51,9 @@ function createContract(contractData, customerID) {
         contractData.paymentmethod,
         contractData.omadiko,
         contractData.pinakida,
+        contractData.ispaid,
+        contractData.paydate,
+		contractData.inform,
     ];
 
     return new Promise((resolve, reject) => {
@@ -109,11 +112,12 @@ function deleteContract(ConId, callback) {
 
 function getContractsAndCustomer(){
     const insertQuery = `
-    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate
+    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
     FROM contracts
     INNER JOIN customer ON contracts.custid=customer.cid
     INNER JOIN insurances ON insurances.inid=contracts.insuranceid
-    INNER JOIN branches ON branches.bid=contracts.branchid;
+    INNER JOIN branches ON branches.bid=contracts.branchid
+	 ORDER BY enddate ASC;
 `;
 return new Promise((resolve, reject) => {
     db.query(insertQuery,(err, results) => {

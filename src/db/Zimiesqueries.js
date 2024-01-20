@@ -2,7 +2,12 @@ const res = require('express/lib/response');
 const db = require('./db')
 
 function GetAllZimies() {
-    const selectQuery = 'SELECT * FROM  zimies ';
+   const selectQuery = `SELECT * , DATE_FORMAT(inputdate, '%d-%m-%Y') AS inputdate
+    FROM zimies
+    INNER JOIN contracts ON contracts.conid=zimies.contractid
+    INNER JOIN customer ON zimies.customerid=customer.cid
+    INNER JOIN insurances ON insurances.inid=zimies.insidid;
+    `;
     return new Promise((resolve, reject) => {
         db.query(selectQuery, (err, results) => {
             if (err) {
@@ -42,11 +47,11 @@ function DeleteZimiesById(zimid) {
 }
 
 function AddZimies(ZimiesData) {
-    const query = `INSERT INTO zimies(insidid, custumerid, znumber, poso, status, contractid, inputdate)
+    const query = `INSERT INTO zimies(insidid, customerid, znumber, poso, status, contractid, inputdate)
                     VALUES(?, ?, ?, ?, ?, ?, ?)`;
     const values = [
         ZimiesData.insidid,
-        ZimiesData.custumerid,
+        ZimiesData.customerid,
         ZimiesData.znumber,
         ZimiesData.poso,
         ZimiesData.status,

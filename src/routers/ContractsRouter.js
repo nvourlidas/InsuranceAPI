@@ -86,7 +86,7 @@ router.patch('/contracts/:id', async (req, res) => {
   const conid = req.params.id;
   const updates = req.body;
   const check = Object.keys(req.body);
-  const allowedProperties = ['conumber', 'custid', 'insuranceid', 'branchid', 'startdate', 'enddate', 'clear', 'mikta', 'promithia', 'paymentmethod', 'omadiko', 'pinakida', 'ispaid', 'paydate'];
+  const allowedProperties = ['conumber', 'custid', 'insuranceid', 'branchid', 'startdate', 'enddate', 'clear', 'mikta', 'promithia', 'paymentmethod', 'omadiko', 'pinakida', 'ispaid', 'paydate', 'inform'];
   
   const allUpdatesExist = check.every(key => allowedProperties.includes(key));
     

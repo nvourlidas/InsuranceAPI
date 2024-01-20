@@ -10,7 +10,7 @@ function insertCustomer(data, callback) {
 
 function getCustomers(callback) {
     const selectQuery = `
-      SELECT *,DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday FROM customer
+      SELECT *,DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday FROM customer ORDER BY surname ASC
     `;
     db.query(selectQuery, callback);
 }
