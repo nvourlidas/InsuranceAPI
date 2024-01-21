@@ -1,6 +1,6 @@
 const express = require('express');
 const router = new express.Router();
-const GetDelContrancts = require('../db/DeletedCustomersqueries');
+const GetDelContrancts = require('../db/DelContractsqueries');
 
 router.get('/delcontracts', async (req, res) => {
     try {
