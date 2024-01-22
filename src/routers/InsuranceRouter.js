@@ -38,6 +38,7 @@ router.post('/insurances', async (req, res) => {
       const newIns = await PostInsurances(insuranceData);
       res.status(201).send(); // 201 status for resource creation
       res.status(201).json(newIns);
+      console.log(newIns)
   } catch (e) {
       console.log(e);
       res.status(500).send(e);
