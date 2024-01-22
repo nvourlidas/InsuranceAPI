@@ -1,7 +1,6 @@
 const express = require('express');
-const router = express.Router();
-const db = require('../db/db')
-const { GetAllDeletedContracts,PermaDeleteContract,RestoreContract} = require('../db/DelContractsqueries');
+const router = new express.Router();
+const GetDelContrancts = require('../db/DeletedCustomersqueries');
 
 router.get('/deleted_contracts', async (req, res) => {
     try {
