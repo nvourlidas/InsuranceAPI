@@ -1,7 +1,7 @@
 const express = require('express')
 const db = require('../db/db')
 const router = new express.Router()
-const {getAllFiles,uploadFileToDatabase,getFileByIdAsync,getCustomerNameAndSurnameForTest} = require('../db/Filesqueries')
+const {getAllFiles,uploadFileToDatabase,getFileByIdAsync,deleteFile} = require('../db/Filesqueries')
 const multer = require('multer')
 const iconv = require('iconv-lite');
 
@@ -10,7 +10,22 @@ const iconv = require('iconv-lite');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage })
 
+router.delete('/files/:id', async (req, res) => {
+    const fileId = req.params.id;
+    try {
+        // Call the deleteFile function with the provided file ID
+        const result = await deleteFile(fileId);
 
+        if (result.affectedRows > 0) {
+            res.status(200).json({ message: 'File deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'File not found' });
+        }
+    } catch (e) {
+        console.error(e);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 router.get('/files',async(req,res)=>{
     try{
@@ -72,7 +87,6 @@ router.get('/download/:id', async (req, res) => {
     res.status(500).send('Error retrieving or processing file.');
   }
 });
-
 
 
 module.exports=router

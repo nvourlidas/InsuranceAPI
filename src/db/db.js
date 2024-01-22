@@ -3,12 +3,12 @@
 const mysql = require('mysql2')
 
 const db= mysql.createConnection({
-    host: "localhost",
-    user: "nikosvour",
-    password: "!@#$%^ABGD789",
-    database: 'yivfclqm_insuranceApi',
-    port: '3306'
-   });
+  host: "localhost",
+  user: "nikosvour",
+  password: "!@#$%^ABGD789",
+  database: 'yivfclqm_insuranceApi',
+  port: '3306'
+ });
 
 db.connect((err) => {
     if (err) {
@@ -30,3 +30,12 @@ module.exports=db
 
 //old host: 94.130.204.38
 //new db PAss: !@#$%^ABGD789
+
+
+// const db= mysql.createConnection({
+//   host: "insurance.cpe004wkwk7y.eu-west-2.rds.amazonaws.com",
+//   user: "admin",
+//   password: "123456789",
+//   database: 'yivfclqm_insuranceApi',
+//   port: '3306'
+//  });

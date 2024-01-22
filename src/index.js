@@ -13,7 +13,7 @@ const DeletedContracts = require('./routers/DelContractsRouter')
 const app = express()
 app.use(bodyParser.json());
 
-const port = process.env.PORT  || 8080
+const port = process.env.PORT  || 3000
 
 app.use(UserRouter)
 app.use(ContractRouter)

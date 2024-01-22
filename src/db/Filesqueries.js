@@ -13,6 +13,18 @@ function getAllFiles() {
     });
 }
 
+function deleteFile(fileId) {
+  const deleteQuery = 'DELETE FROM test WHERE id = ?';
+  return new Promise((resolve, reject) => {
+      db.query(deleteQuery, [fileId], (err, results) => {
+          if (err) {
+              reject(err);
+          } else {
+              resolve(results);
+          }
+      });
+  });
+}
 
 function uploadFileToDatabase(filename, fileBuffer, cuid, coid, zimid) {
     const insertQuery = 'INSERT INTO test (filename, data, cuid, coid, zimid) VALUES (?, ?, ?, ?, ?)';
@@ -60,11 +72,10 @@ function getFileByIdAsync(fileId) {
 }
 
 
-
-
 module.exports = {
     getAllFiles,
     uploadFileToDatabase,
     getFileByIdAsync,
-    getCustomerNameAndSurnameForTest
+    getCustomerNameAndSurnameForTest,
+    deleteFile
 };

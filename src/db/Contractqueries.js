@@ -1,7 +1,4 @@
 
-
-
-
 const db = require('./db')
 
 function getAllContracts() {
@@ -86,13 +83,13 @@ function ContractsInsurance() {
 });  
 }
 
-function deleteContract(ConId, callback) {
+function deleteContract(conId, callback) {
     const checkQuery = `
-      SELECT * FROM contracts
-      WHERE conid =?
+        SELECT * FROM contracts
+        WHERE conid = ?
     `;
 
-    db.query(checkQuery, [ConId], (err, result) => {
+    db.query(checkQuery, [conId], (err, result) => {
         if (err) {
             console.error('Error executing MySQL query:', err);
             return callback(err, null);
@@ -102,13 +99,58 @@ function deleteContract(ConId, callback) {
             return callback(null, { notFound: true });
         }
 
-        const deleteQuery = `
-            DELETE FROM contracts
-            WHERE conid =?
+        const contractToDelete = result[0];
+
+        // Insert the contract into delcontracts
+        const insertIntoDelContractsQuery = `
+            INSERT INTO delcontracts (conid, conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod, omadiko, pinakida, ispaid, paydate, inform)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        db.query(deleteQuery, [ConId], callback);
+
+        const delContractsParams = [
+            contractToDelete.conid,
+            contractToDelete.conumber,
+            contractToDelete.custid,
+            contractToDelete.insuranceid,
+            contractToDelete.branchid,
+            contractToDelete.startdate,
+            contractToDelete.enddate,
+            contractToDelete.clear,
+            contractToDelete.mikta,
+            contractToDelete.promithia,
+            contractToDelete.paymentmethod,
+            contractToDelete.omadiko,
+            contractToDelete.pinakida,
+            contractToDelete.ispaid,
+            contractToDelete.paydate,
+            contractToDelete.inform
+        ];
+
+        db.query(insertIntoDelContractsQuery, delContractsParams, (err, insertResult) => {
+            if (err) {
+                console.error('Error executing MySQL query:', err);
+                return callback(err, null);
+            }
+
+            // After successful insertion into delcontracts, proceed to delete from contracts
+            const deleteQuery = `
+                DELETE FROM contracts
+                WHERE conid = ?
+            `;
+
+            db.query(deleteQuery, [conId], (err, deleteResult) => {
+                if (err) {
+                    console.error('Error executing MySQL query:', err);
+                    return callback(err, null);
+                }
+
+                // Provide some information about the deleted contract
+                callback(null, { deletedContract: contractToDelete });
+            });
+        });
     });
 }
+
 
 function getContractsAndCustomer(){
     const insertQuery = `
