@@ -29,7 +29,7 @@ function getUserbyAFM(afm) {
     });
 }
 
-function createContract(contractData, customerID) {
+function createContract(contractData, customerID, customers) {
     const insertQuery = `
         INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
@@ -60,7 +60,7 @@ function createContract(contractData, customerID) {
             } else {
                 const newContractId = results.insertId;
                 if(contractData.omadiko == 1) {
-                    resolve(newContractId)
+                    resolve(customers)
                 }
                 resolve({ id: newContractId, ...contractData });
                 

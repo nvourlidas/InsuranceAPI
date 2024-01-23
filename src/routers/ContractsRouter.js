@@ -16,6 +16,7 @@ router.get('/contracts', async(req,res) =>{
 router.post('/contracts', async (req, res) => {
     const customerafm = req.body.afm;
     const contractData = req.body;
+    const customers = req.body.customers;
 
     try {
         const customerID = await getUserbyAFM(customerafm);
@@ -23,7 +24,7 @@ router.post('/contracts', async (req, res) => {
         if (!customerID) {
             return res.status(404).send('Customer not found');
         }
-        const newContract = await createContract(contractData, customerID);
+        const newContract = await createContract(contractData, customerID, customers);
         console.log(customerID);
         res.status(201).json(newContract);
     } catch (e) {
