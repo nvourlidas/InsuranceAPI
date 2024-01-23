@@ -31,8 +31,8 @@ function getUserbyAFM(afm) {
 
 function createContract(contractData, customerID) {
     const insertQuery = `
-        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform, cust_array)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)
+        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
     `;
     
     const values = [
@@ -51,7 +51,6 @@ function createContract(contractData, customerID) {
         contractData.ispaid,
         contractData.paydate,
 		contractData.inform,
-        contractData.cust_array,
     ];
 
     return new Promise((resolve, reject) => {
@@ -60,7 +59,11 @@ function createContract(contractData, customerID) {
                 reject(err);
             } else {
                 const newContractId = results.insertId;
+                if(contractData.omadiko == 1) {
+                    resolve(newContractId)
+                }
                 resolve({ id: newContractId, ...contractData });
+                
             }
         });
     });
