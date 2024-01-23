@@ -66,13 +66,7 @@ function createContract(contractData, customerID, customers) {
                     for(var i=0; i<custid_array.length; i++){
                        const insertQuery2 = `INSERT INTO omadika (coid, cuid) VALUES (?,?)` 
 
-                       db.query(insertQuery2, [newContractId, custid_array[i]], (err, results) => {
-                        if (err) {
-                            reject(err);
-                        }else{
-                            resolve(results)
-                        }
-                       } )
+                       db.query(insertQuery2, [newContractId, custid_array[i]])
                     }
                 }
                 resolve({ id: newContractId, ...contractData });
