@@ -1,7 +1,12 @@
 const db = require('./db');
 
 function GetAllDeletedContracts() {
-    const sql = `SELECT * FROM delcontracts
+    const sql = `SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
+    FROM delcontracts
+    INNER JOIN customer ON delcontracts.custid=customer.cid
+    INNER JOIN insurances ON insurances.inid=delcontracts.insuranceid
+    INNER JOIN branches ON branches.bid=delcontracts.branchid
+	 ORDER BY enddate ASC;
     `;
 
     return new Promise((resolve, reject) => {
