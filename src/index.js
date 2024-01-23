@@ -9,6 +9,7 @@ const FileRouter = require('./routers/FilesRouter')
 const ZimiesRouter = require('./routers/ZimiesRouter')
 const DeletedCostumers = require('./routers/DeletedCustomersRouter')
 const DeletedContracts = require('./routers/DelContractsRouter')
+const LoginRouter = require('./routers/Login')
 
 const app = express()
 app.use(bodyParser.json());
@@ -24,6 +25,7 @@ app.use(FileRouter)
 app.use(ZimiesRouter)
 app.use(DeletedCostumers)
 app.use(DeletedContracts)
+app.use(LoginRouter)
 
 app.listen(port, ()=>{
     console.log('Server is running on port: ',port)

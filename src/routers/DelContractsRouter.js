@@ -1,6 +1,6 @@
 const express = require('express');
 const router = new express.Router();
-const GetDelContrancts = require('../db/DeletedCustomersqueries');
+const { GetAllDeletedContracts, DeleteDeletedCustomer, PermaDeleteContract } = require('../db/DelContractsqueries');
 
 router.get('/deleted_contracts', async (req, res) => {
     try {
@@ -13,7 +13,7 @@ router.get('/deleted_contracts', async (req, res) => {
 });
 
 // Router for permanently deleting a contract from delcontracts
-router.delete('/delcontracts/:conid', async (req, res) => {
+router.delete('/permadelcontracts/:conid', async (req, res) => {
     const conId = req.params.conid;
 
     try {
@@ -30,22 +30,22 @@ router.delete('/delcontracts/:conid', async (req, res) => {
     }
 });
 
-router.post('/restore_contract/:conid', async (req, res) => {
-    const conId = req.params.conid;
+router.delete('/deletedelcontracts',async(req,res)=>{
+    const delcontractID = req.body.id;
+    console.log(delcontractID)
 
-    try {
-        const restoreResult = await RestoreContract(conId);
-
-        if (restoreResult.notFound) {
-            res.status(404).send({ error: 'Contract not found in delcontracts' });
-        } else if (restoreResult.success) {
-            res.status(200).send({ success: true });
+    try{
+        const result = await DeleteDeletedCustomer(delcontractID)
+        if (result.notFound) {
+            res.status(404).send('Customer not found');
+        } else {
+            res.status(200).send('User is deleted');
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send({ error: 'Internal Server Error' });
+    }catch(e){
+        console.error('Error executing MySQL query:', error);
+        res.status(500).send('Internal Server Error');
     }
-});
+})
 
 
 module.exports = router;

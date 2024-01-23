@@ -35,43 +35,67 @@ function PermaDeleteContract(conId) {
     });
 }
 
-async function RestoreContract(conId) {
-    try {
-        // Get the contract details from delcontracts
-        const selectQuery = `SELECT * FROM delcontracts WHERE conid = ?`;
-        const [contractData] = await db.query(selectQuery, [conId]);
-
-        if (!contractData) {
-            // Contract not found in delcontracts
-            return { notFound: true };
-        }
-
-        // Insert the contract into the contract table
-        const insertQuery = `
-            INSERT INTO contract (conid, conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, 
-                                  paymentmethod, omadiko, pinakida, ispaid, paydate, inform)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+function DeleteDeletedCustomer(conId) {
+    return new Promise((resolve, reject) => {
+        const checkQuery = `
+            SELECT * FROM delcontracts
+            WHERE conid = ?
         `;
 
-        const values = [
-            contractData.conid, contractData.conumber, contractData.custid, contractData.insuranceid,
-            contractData.branchid, contractData.startdate, contractData.enddate, contractData.clear,
-            contractData.mikta, contractData.promithia, contractData.paymentmethod, contractData.omadiko,
-            contractData.pinakida, contractData.ispaid, contractData.paydate, contractData.inform
-        ];
+        db.query(checkQuery, [conId], (err, result) => {
+            if (err) {
+                console.error('Error executing MySQL query:', err);
+                reject(err);
+            }
 
-        await db.query(insertQuery, values);
+            if (result.length === 0) {
+                resolve({ notFound: true });
+            }
 
-        // Delete the contract from delcontracts
-        const deleteQuery = `DELETE FROM delcontracts WHERE conid = ?`;
-        await db.query(deleteQuery, [conId]);
+            // Move customer to delcustomer table
+            const moveQuery = `
+                INSERT INTO contracts (conid, conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod, omadiko, pinakida, ispaid, paydate,inform)
+                SELECT conid, conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod, omadiko, pinakida, ispaid, paydate,inform
+                FROM delcontracts
+                WHERE conid = ?;
+            `;
+            
+            // Parameters for the moveQuery
+            const moveParams = [conId];
 
-        return { success: true };
-    } catch (error) {
-        console.error('Error in restoring contract:', error);
-        throw error;
-    }
+            db.query(moveQuery, moveParams, (err, moveResult) => {
+                if (err) {
+                    console.error('Error moving customer to delcustomer table:', err);
+                    reject(err);
+                }
+
+                // Delete customer from customer table
+                const deleteQuery = `
+                    DELETE FROM delcontracts
+                    WHERE conid = ?
+                `;
+
+                // Parameters for the deleteQuery
+                const deleteParams = [conId];
+
+                db.query(deleteQuery, deleteParams, (err, deleteResult) => {
+                    if (err) {
+                        console.error('Error deleting customer from customer table:', err);
+                        reject(err);
+                    }
+
+                    resolve({ success: true });
+                });
+            });
+        });
+    });
 }
 
 
-module.exports = {  GetAllDeletedContracts,PermaDeleteContract,RestoreContract}
+
+
+module.exports = {  
+    GetAllDeletedContracts,
+    PermaDeleteContract,
+    DeleteDeletedCustomer
+};
