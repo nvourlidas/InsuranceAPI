@@ -58,9 +58,10 @@ function createContract(contractData, customerID, customers) {
             if (err) {
                 reject(err);
             } else {
+                const custid_array =[]
                 const newContractId = results.insertId;
                 if(contractData.omadiko == 1) {
-                    const custid_array = customers.map(item => item.cid)
+                     custid_array = customers.map(item => item.cid)
 
                     for(var i=0; i<custid_array.length; i++){
                        const insertQuery2 = `INSERT INTO omadika (coid, cuid) VALUES (?,?)` 
@@ -69,11 +70,10 @@ function createContract(contractData, customerID, customers) {
                         if (err) {
                             reject(err);
                         }else{
-                            resolve(customers)
+                            resolve(results)
                         }
                        } )
                     }
-                    
                 }
                 resolve({ id: newContractId, ...contractData });
                 
