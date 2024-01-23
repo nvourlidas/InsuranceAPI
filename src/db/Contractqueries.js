@@ -31,8 +31,8 @@ function getUserbyAFM(afm) {
 
 function createContract(contractData, customerID) {
     const insertQuery = `
-        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
+        INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform, cust_array)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)
     `;
     
     const values = [
@@ -51,6 +51,7 @@ function createContract(contractData, customerID) {
         contractData.ispaid,
         contractData.paydate,
 		contractData.inform,
+        contractData.cust_array,
     ];
 
     return new Promise((resolve, reject) => {
