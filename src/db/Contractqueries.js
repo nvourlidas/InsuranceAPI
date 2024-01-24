@@ -34,7 +34,7 @@ function createContract(contractData, customerID, customers) {
         INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
     `;
-    
+
     const values = [
         contractData.conumber,
         customerID,
@@ -50,7 +50,7 @@ function createContract(contractData, customerID, customers) {
         contractData.pinakida,
         contractData.ispaid,
         contractData.paydate,
-		contractData.inform,
+        contractData.inform,
     ];
 
     return new Promise((resolve, reject) => {
@@ -58,25 +58,56 @@ function createContract(contractData, customerID, customers) {
             if (err) {
                 reject(err);
             } else {
-                let custid_array =[]
+                let custid_array = []
                 const newContractId = results.insertId;
-                if(contractData.omadiko == 1) {
-                     custid_array = customers.map(item => item.cid)
+                if (contractData.omadiko == 1) {
+                    custid_array = customers.map(item => item.cid)
 
-                    for(var i=0; i<custid_array.length; i++){
-                       const insertQuery2 = `INSERT INTO omadika (coid, cuid) VALUES (?,?)` 
+                    for (var i = 0; i < custid_array.length; i++) {
+                        const insertQuery2 = `INSERT INTO omadika (coid, cuid) VALUES (?,?)`
 
-                       db.query(insertQuery2, [newContractId, custid_array[i]], (err, results) => {
-                        if (err) {
-                            reject(err);
-                        }else{
-                            resolve(results)
-                        }
-                       } )
+                        db.query(insertQuery2, [newContractId, custid_array[i]], (err, results) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(results)
+                            }
+                        })
+
+                        const insertQuery3 = `
+                                INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
+                            `;
+
+                            const values3 = [
+                                contractData.conumber,
+                                custid_array[i],
+                                contractData.insuranceid,
+                                contractData.branchid,
+                                contractData.startdate,
+                                contractData.enddate,
+                                contractData.clear,
+                                contractData.mikta,
+                                contractData.promithia,
+                                contractData.paymentmethod,
+                                contractData.omadiko,
+                                contractData.pinakida,
+                                contractData.ispaid,
+                                contractData.paydate,
+                                contractData.inform,
+                            ];
+
+                        db.query(insertQuery3, values3, (err, results) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(results)
+                            }
+                        })
                     }
                 }
                 resolve({ id: newContractId, ...contractData });
-                
+
             }
         });
     });
@@ -89,15 +120,15 @@ function ContractsInsurance() {
     INNER JOIN contracts ON insurances.inid=contracts.insuranceid
     INNER JOIN branches ON branches.bid=contracts.branchid;
   `;
-  return new Promise((resolve, reject) => {
-    db.query(selectQuery, (err, results) => {
-        if (err) {
-            reject(err);
-        } else {
-            resolve(results);
-        }
+    return new Promise((resolve, reject) => {
+        db.query(selectQuery, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
-});  
 }
 
 function deleteContract(conId, callback) {
@@ -169,7 +200,7 @@ function deleteContract(conId, callback) {
 }
 
 
-function getContractsAndCustomer(){
+function getContractsAndCustomer() {
     const insertQuery = `
     SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
     FROM contracts
@@ -178,19 +209,19 @@ function getContractsAndCustomer(){
     INNER JOIN branches ON branches.bid=contracts.branchid
 	 ORDER BY enddate ASC;
 `;
-return new Promise((resolve, reject) => {
-    db.query(insertQuery,(err, results) => {
-        if (err) {
-            reject(err);
-        } else {
-            resolve(results);
-        }
+    return new Promise((resolve, reject) => {
+        db.query(insertQuery, (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
     });
-});
 
 }
 
-function getContractById(conid){
+function getContractById(conid) {
     const insertQuery = `
         SELECT * FROM contracts
         WHERE conid = ?
@@ -207,11 +238,11 @@ function getContractById(conid){
     });
 }
 
-function UpdateContracts(id,updates){
-    const insertQuery =` UPDATE contracts SET ? WHERE conid =? `;
+function UpdateContracts(id, updates) {
+    const insertQuery = ` UPDATE contracts SET ? WHERE conid =? `;
 
-    return new Promise((resolve,reject) =>{
-        db.query(insertQuery,[updates,id],(err,results) =>{
+    return new Promise((resolve, reject) => {
+        db.query(insertQuery, [updates, id], (err, results) => {
             if (err) {
                 reject(err);
             } else {
