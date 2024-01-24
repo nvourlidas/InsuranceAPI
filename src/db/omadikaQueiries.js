@@ -35,11 +35,11 @@ function getAllOmadika(id) {
     });
 }
 
-function DeleteOmadika(id) {
-    const query = `DELETE FROM omadika WHERE cuid = ?`;
+function DeleteOmadika(cuid, coid) {
+    const query = `DELETE FROM omadika WHERE cuid = ? AND coid = ?`;
 
     return new Promise((resolve, reject) => {
-        db.query(query, [id], (err, results) => {
+        db.query(query, [cuid, coid], (err, results) => {
             if (err) {
                 reject(err);
             } else {

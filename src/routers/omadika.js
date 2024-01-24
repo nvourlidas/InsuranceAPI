@@ -26,9 +26,10 @@ router.get('/omadika/:id', async(req,res) =>{
 
 
 router.delete('/omadika',async (req,res) => {
-    const id = req.body.id
+    const cuid = req.body.cuid
+    const coid = req.body.coid
     try{
-      const omadikadel = await DeleteOmadika(id)
+      const omadikadel = await DeleteOmadika(cuid, coid)
       res.status(200).send(omadikadel)
   
     }catch(e){
