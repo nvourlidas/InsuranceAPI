@@ -9,6 +9,14 @@ function insertEvent(data, callback) {
 }
 
 
+function getEvents(callback) {
+    const selectQuery = `
+      SELECT * FROM calendar
+    `;
+    db.query(selectQuery, callback);
+}
+
 module.exports = {  
     insertEvent,
+    getEvents,
 };

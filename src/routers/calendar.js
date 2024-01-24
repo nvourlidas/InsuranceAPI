@@ -1,6 +1,6 @@
 const express = require('express')
 const router = new express.Router()
-const {insertEvent} = require('../db/calendarqueries')
+const {insertEvent, getEvents} = require('../db/calendarqueries')
 
 
 router.post('/calendar',(req, res) => {
@@ -12,6 +12,17 @@ router.post('/calendar',(req, res) => {
         res.status(200).send();
     });
   });
+
+
+  router.get('/calendar', (req,res) =>{
+    getEvents((err, results) => {
+      if (err) {
+          console.error('Error executing MySQL query:', err);
+          return res.status(500).send('Internal Server Error');
+      }
+      res.json(results);
+  });
+  })
 
 
   module.exports=router
