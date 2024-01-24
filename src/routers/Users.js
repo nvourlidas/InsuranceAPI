@@ -1,6 +1,6 @@
 const express = require('express')
 const router = new express.Router()
-const {getUsers, insertUser} = require('../db/Usersqueries')
+const {getUsers, insertUser, updateUser, getCustomerById} = require('../db/Usersqueries')
 
 router.get('/users', (req,res) =>{
     getUsers((err, results) => {
@@ -20,6 +20,30 @@ router.get('/users', (req,res) =>{
         }
         res.status(200).send();
     });
+  });
+
+
+  router.patch('/users/:id', async (req, res) => {
+    const customerId = req.params.id;
+    const updates = req.body;
+    const check = Object.keys(req.body);
+    const allowedProperties  = ['name','surname', 'username','password','email']
+    const allUpdatesExist = check.every(key => allowedProperties.includes(key));
+    
+    if (!allUpdatesExist) {
+      res.status(505).send('Invalid argument')
+    }
+    try {
+        const existingCustomer = await getCustomerById(customerId);
+        if (!existingCustomer) {
+            return res.status(404).send('Customer not found');
+        }
+        await updateUser(customerId, updates);
+        res.status(200).send('Customer updated successfully');
+    } catch (error) {
+        console.error('Error updating customer:', error);
+        res.status(500).send('Internal Server Error');
+    }
   });
 
 module.exports=router
