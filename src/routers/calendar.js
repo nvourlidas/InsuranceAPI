@@ -1,6 +1,6 @@
 const express = require('express')
 const router = new express.Router()
-const {insertEvent, getEvents} = require('../db/calendarqueries')
+const {insertEvent, getEvents, DeleteEvent} = require('../db/calendarqueries')
 
 
 router.post('/calendar',(req, res) => {
@@ -23,6 +23,19 @@ router.post('/calendar',(req, res) => {
       }
       res.json(results);
   });
+  })
+
+
+  router.delete('/calendar',async (req,res) => {
+    const id = req.body.id
+    try{
+      const eventdel = await DeleteEvent(id)
+      res.status(200).send(eventdel)
+  
+    }catch(e){
+      console.log(e)
+      res.status(500).send(e)
+    }
   })
 
 

@@ -30,7 +30,23 @@ function getEvents(callback) {
     db.query(selectQuery, callback);
 }
 
+
+function DeleteEvent(id) {
+    const query = `DELETE FROM calendar WHERE id = ?`;
+
+    return new Promise((resolve, reject) => {
+        db.query(query, [id], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 module.exports = {  
     insertEvent,
     getEvents,
+    DeleteEvent,
 };
