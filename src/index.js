@@ -11,6 +11,7 @@ const DeletedCostumers = require('./routers/DeletedCustomersRouter')
 const DeletedContracts = require('./routers/DelContractsRouter')
 const Omadika = require('./routers/omadika')
 const Users = require('./routers/Users')
+const calendar = require('./routers/calendar')
 // const LoginRouter = require('./routers/Login')
 
 const app = express()
@@ -29,6 +30,7 @@ app.use(DeletedCostumers)
 app.use(DeletedContracts)
 app.use(Omadika)
 app.use(Users)
+app.use(calendar)
 // app.use(LoginRouter)
 
 app.listen(port, ()=>{
