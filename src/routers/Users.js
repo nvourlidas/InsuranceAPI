@@ -1,6 +1,6 @@
 const express = require('express')
 const router = new express.Router()
-const {getUsers, insertUser, updateUser, getCustomerById} = require('../db/Usersqueries')
+const {getUsers, insertUser, updateUser, getCustomerById, DeleteUser} = require('../db/Usersqueries')
 
 router.get('/users', (req,res) =>{
     getUsers((err, results) => {
@@ -45,5 +45,17 @@ router.get('/users', (req,res) =>{
         res.status(500).send('Internal Server Error');
     }
   });
+
+  router.delete('/users',async (req,res) => {
+    const id = req.body.id
+    try{
+      const userdel = await DeleteUser(id)
+      res.status(200).send(userdel)
+  
+    }catch(e){
+      console.log(e)
+      res.status(500).send(e)
+    }
+  })
 
 module.exports=router

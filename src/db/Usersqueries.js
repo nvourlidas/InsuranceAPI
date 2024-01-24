@@ -41,9 +41,24 @@ function updateUser(customerId, updates) {
     });
 }
 
+function DeleteUser(id) {
+    const query = `DELETE FROM Users WHERE id = ?`;
+
+    return new Promise((resolve, reject) => {
+        db.query(query, [id], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+}
+
 module.exports = {  
     getUsers,
     insertUser,
     getCustomerById,
-    updateUser
+    updateUser,
+    DeleteUser
 };
