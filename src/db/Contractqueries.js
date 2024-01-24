@@ -80,7 +80,7 @@ function createContract(contractData, customerID, customers) {
                             `;
 
                             const values3 = [
-                                contractData.conumber,
+                                newContractId,
                                 custid_array[i],
                                 contractData.insuranceid,
                                 contractData.branchid,
