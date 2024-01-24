@@ -12,7 +12,7 @@ router.get('/users', (req,res) =>{
   });
   })
 
-  router.post('/user',(req, res) => {
+  router.post('/users',(req, res) => {
     insertUser(req.body, (err, results) => {
         if (err) {
             console.error('Error inserting into the table:', err);
