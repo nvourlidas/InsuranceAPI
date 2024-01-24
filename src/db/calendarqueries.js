@@ -45,8 +45,37 @@ function DeleteEvent(id) {
     });
 }
 
+
+function getCustomerById(customerId) {
+    const selectQuery = 'SELECT * FROM calendar WHERE id = ?';
+    return new Promise((resolve, reject) => {
+        db.query(selectQuery, [customerId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results[0]);
+            }
+        });
+    });
+}
+
+function updateEvent(customerId, updates) {
+    const updateQuery = 'UPDATE calendar SET ? WHERE id = ?';
+    return new Promise((resolve, reject) => {
+        db.query(updateQuery, [updates, customerId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 module.exports = {  
     insertEvent,
     getEvents,
     DeleteEvent,
+    getCustomerById,
+    updateEvent
 };
