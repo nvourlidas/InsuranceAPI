@@ -73,38 +73,6 @@ function createContract(contractData, customerID, customers) {
                                 resolve(results)
                             }
                         })
-
-                        const insertQuery3 = `
-                                INSERT INTO contracts (conid,conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)
-                            `;
-
-                            const values3 = [
-                                newContractId,
-                                contractData.conumber,
-                                custid_array[i],
-                                contractData.insuranceid,
-                                contractData.branchid,
-                                contractData.startdate,
-                                contractData.enddate,
-                                contractData.clear,
-                                contractData.mikta,
-                                contractData.promithia,
-                                contractData.paymentmethod,
-                                contractData.omadiko,
-                                contractData.pinakida,
-                                contractData.ispaid,
-                                contractData.paydate,
-                                contractData.inform,
-                            ];
-
-                        db.query(insertQuery3, values3, (err, results) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                resolve(results)
-                            }
-                        })
                     }
                 }
                 resolve({ id: newContractId, ...contractData });

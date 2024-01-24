@@ -1,5 +1,17 @@
 const db = require('./db');
 
+
+function getOmadika(callback) {
+    const selectQuery = `
+    SELECT *, DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
+    FROM customer
+    JOIN omadika ON customer.cid = omadika.cuid
+    JOIN contracts ON contracts.conid = omadika.coid ORDER BY surname ASC
+    `;
+    db.query(selectQuery, callback);
+}
+
+
 function getAllOmadika(id) {
     const sql = `SELECT *, DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
     FROM customer
@@ -54,5 +66,6 @@ function AddOmadiko(omadikaData) {
 module.exports = {  
     getAllOmadika,
     DeleteOmadika,
-    AddOmadiko
+    AddOmadiko,
+    getOmadika
 };

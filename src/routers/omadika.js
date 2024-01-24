@@ -1,6 +1,17 @@
 const express = require('express')
 const router = new express.Router()
-const {getAllOmadika, DeleteOmadika, AddOmadiko} = require('../db/omadikaQueiries')
+const {getOmadika, getAllOmadika, DeleteOmadika, AddOmadiko} = require('../db/omadikaQueiries')
+
+
+router.get('/omadika', (req,res) =>{
+  getOmadika((err, results) => {
+    if (err) {
+        console.error('Error executing MySQL query:', err);
+        return res.status(500).send('Internal Server Error');
+    }
+    res.json(results);
+});
+})
 
 //GET OMADIKA
 router.get('/omadika/:id', async(req,res) =>{
