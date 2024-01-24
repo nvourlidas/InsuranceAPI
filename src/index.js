@@ -10,6 +10,7 @@ const ZimiesRouter = require('./routers/ZimiesRouter')
 const DeletedCostumers = require('./routers/DeletedCustomersRouter')
 const DeletedContracts = require('./routers/DelContractsRouter')
 const Omadika = require('./routers/omadika')
+const Users = require('./routers/Users')
 // const LoginRouter = require('./routers/Login')
 
 const app = express()
@@ -27,6 +28,7 @@ app.use(ZimiesRouter)
 app.use(DeletedCostumers)
 app.use(DeletedContracts)
 app.use(Omadika)
+app.use(Users)
 // app.use(LoginRouter)
 
 app.listen(port, ()=>{
