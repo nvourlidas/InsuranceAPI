@@ -43,7 +43,7 @@ router.post('/calendar',(req, res) => {
     const customerId = req.params.id;
     const updates = req.body;
     const check = Object.keys(req.body);
-    const allowedProperties  = ['end']
+    const allowedProperties  = ['start','end']
     const allUpdatesExist = check.every(key => allowedProperties.includes(key));
     
     if (!allUpdatesExist) {
