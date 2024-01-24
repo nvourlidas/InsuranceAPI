@@ -75,12 +75,13 @@ function createContract(contractData, customerID, customers) {
                         })
 
                         const insertQuery3 = `
-                                INSERT INTO contracts (conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?)
+                                INSERT INTO contracts (conid,conumber, custid, insuranceid, branchid, startdate, enddate, clear, mikta, promithia, paymentmethod,omadiko,pinakida, ispaid, paydate,inform)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)
                             `;
 
                             const values3 = [
                                 newContractId,
+                                contractData.conumber,
                                 custid_array[i],
                                 contractData.insuranceid,
                                 contractData.branchid,
