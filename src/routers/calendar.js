@@ -1,6 +1,6 @@
 const express = require('express')
 const router = new express.Router()
-const {insertEvent} = require('../db/Usersqueries')
+const {insertEvent} = require('../db/calendarqueries')
 
 
 router.post('/calendar',(req, res) => {
