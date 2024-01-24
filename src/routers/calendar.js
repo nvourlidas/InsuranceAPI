@@ -4,7 +4,8 @@ const {insertEvent, getEvents} = require('../db/calendarqueries')
 
 
 router.post('/calendar',(req, res) => {
-    insertEvent(req.body, (err, results) => {
+    const allday = req.body.allDay
+    insertEvent(req.body, allday, (err, results) => {
         if (err) {
             console.error('Error inserting into the table:', err);
             return res.status(500).send('Error inserting into the table');

@@ -1,11 +1,25 @@
 const db = require('./db');
 
-function insertEvent(data, callback) {
+function insertEvent(data, allday, callback) {
     const insertQuery = `
       INSERT INTO calendar (title, start, end, allDay)
       VALUES (?, ?, ?, ?)
     `;
-    db.query(insertQuery, [...Object.values(data)], callback);
+
+    if(allday) {
+        var newallday = 0
+    }else {
+        var newallday = 1
+    }
+
+    const values = [ 
+        data.title,
+        data.start,
+        data.end,
+        newallday
+    ]
+
+    db.query(insertQuery, values, callback);
 }
 
 
