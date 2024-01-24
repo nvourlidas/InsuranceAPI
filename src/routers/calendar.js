@@ -10,7 +10,7 @@ router.post('/calendar',(req, res) => {
             console.error('Error inserting into the table:', err);
             return res.status(500).send('Error inserting into the table');
         }
-        res.status(200).send(results.insertId);
+        res.status(200).send(results.id);
     });
   });
 
