@@ -6,7 +6,10 @@ function getOmadika(callback) {
     SELECT *, DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
     FROM customer
     JOIN omadika ON customer.cid = omadika.cuid
-    JOIN contracts ON contracts.conid = omadika.coid ORDER BY surname ASC
+    JOIN contracts ON contracts.conid = omadika.coid
+    INNER JOIN insurances ON insurances.inid=contracts.insuranceid
+    INNER JOIN branches ON branches.bid=contracts.branchid
+     ORDER BY surname ASC
     `;
     db.query(selectQuery, callback);
 }
