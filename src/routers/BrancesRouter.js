@@ -32,7 +32,7 @@ router.post('/branches', async (req, res) => {
 
     try {
         const newBranchId = await AddBranch(branchData);
-        res.status(201).send(newBranchId); // 201 status for successful creation
+        res.status(201).send({ id: newBranchId }); // 201 status for successful creation
     } catch (e) {
         console.log(e);
         res.status(500).send({ error: e });
