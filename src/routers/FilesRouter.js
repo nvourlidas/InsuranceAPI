@@ -48,9 +48,9 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   }
   try {
     const decodedFilename = iconv.decode(file.originalname, 'utf-8');
-    await uploadFileToDatabase(decodedFilename, file.buffer,cuid,coid,zimid);
+    const file = await uploadFileToDatabase(decodedFilename, file.buffer,cuid,coid,zimid);
     console.log('File uploaded and saved to database.');
-    res.status(200).send('File uploaded and saved to database.');
+    res.status(200).send(file);
   } catch (error) {
     console.error('Error inserting file into database:', error);
     res.status(500).send('Error inserting file into database.');
