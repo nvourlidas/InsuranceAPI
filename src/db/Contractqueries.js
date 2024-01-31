@@ -176,7 +176,7 @@ function getContractsAndCustomer() {
     INNER JOIN customer ON contracts.custid=customer.cid
     INNER JOIN insurances ON insurances.inid=contracts.insuranceid
     INNER JOIN branches ON branches.bid=contracts.branchid
-	 ORDER BY enddate ASC;
+	 ORDER BY enddate;
 `;
     return new Promise((resolve, reject) => {
         db.query(insertQuery, (err, results) => {
