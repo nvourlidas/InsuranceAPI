@@ -171,12 +171,12 @@ function deleteContract(conId, callback) {
 
 function getContractsAndCustomer() {
     const insertQuery = `
-    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
+    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(enddate, '%d-%m-%Y') AS enddate, DATE_FORMAT(paydate, '%d-%m-%Y') AS paydate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
     FROM contracts
     INNER JOIN customer ON contracts.custid=customer.cid
     INNER JOIN insurances ON insurances.inid=contracts.insuranceid
     INNER JOIN branches ON branches.bid=contracts.branchid
-	ORDER BY contracts.enddate ASC;
+	ORDER BY enddate ASC;
 `;
     return new Promise((resolve, reject) => {
         db.query(insertQuery, (err, results) => {
