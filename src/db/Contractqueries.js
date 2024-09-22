@@ -171,7 +171,7 @@ function deleteContract(conId, callback) {
 
 function getContractsAndCustomer() {
     const insertQuery = `
-    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday
+    SELECT * , DATE_FORMAT(startdate, '%d-%m-%Y') AS startdate, DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday, DATE_FORMAT(licenseDate, '%d-%m-%Y') AS licenseDate
     FROM contracts
     INNER JOIN customer ON contracts.custid=customer.cid
     INNER JOIN insurances ON insurances.inid=contracts.insuranceid

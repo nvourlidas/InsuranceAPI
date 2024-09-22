@@ -49,7 +49,7 @@ router.patch('/customer/:id', async (req, res) => {
   const customerId = req.params.id;
   const updates = req.body;
   const check = Object.keys(req.body);
-  const allowedProperties  = ['name','surname','email','cellphone','phone','gender','postcode','property','birthday','afm']
+  const allowedProperties  = ['name','surname','email','cellphone','phone','gender','postcode','property','birthday','afm', 'licenseDate']
   const allUpdatesExist = check.every(key => allowedProperties.includes(key));
   
   if (!allUpdatesExist) {

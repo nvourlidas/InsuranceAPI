@@ -2,15 +2,15 @@ const db = require('./db')
 
 function insertCustomer(data, callback) {
     const insertQuery = `
-      INSERT INTO customer (name, surname, email, cellphone, phone, gender, postcode, property, birthday,afm)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+      INSERT INTO customer (name, surname, email, cellphone, phone, gender, postcode, property, birthday, afm, licenseDate)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)
     `;
     db.query(insertQuery, [...Object.values(data)], callback);
 }
 
 function getCustomers(callback) {
     const selectQuery = `
-      SELECT *,DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday FROM customer ORDER BY surname ASC
+      SELECT *,DATE_FORMAT(birthday, '%d-%m-%Y') AS birthday, DATE_FORMAT(licenseDate, '%d-%m-%Y') AS licenseDate FROM customer ORDER BY surname ASC
     `;
     db.query(selectQuery, callback);
 }
@@ -34,8 +34,8 @@ function deleteCustomer(CustomerId) {
 
             // Move customer to delcustomer table
             const moveQuery = `
-                INSERT INTO delcustomer (cid, name, surname, email, cellphone, phone, gender, postcode, property, birthday, afm)
-                SELECT cid, name, surname, email, cellphone, phone, gender, postcode, property, birthday, afm
+                INSERT INTO delcustomer (cid, name, surname, email, cellphone, phone, gender, postcode, property, birthday, afm, licenseDate)
+                SELECT cid, name, surname, email, cellphone, phone, gender, postcode, property, birthday, afm, licenseDate
                 FROM customer
                 WHERE cid = ?
             `;
